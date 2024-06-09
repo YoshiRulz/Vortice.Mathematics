@@ -1,8 +1,13 @@
 <Project>
   <ItemGroup>
+    <PackageVersion Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageVersion Include="PolySharp" Version="1.14.1" />
+    <PackageVersion Include="System.Memory" Version="4.5.5" />
+    <PackageVersion Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageVersion Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" /> <!-- for some reason, version 6.0.0 refuses to work when targeting netcoreapp3.0, even though that subsumes netstandard2.0 which continues to be supported https://github.com/dotnet/runtime/issues/62561 -->
   </ItemGroup>
 
 </Project>
