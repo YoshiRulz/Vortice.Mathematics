@@ -16,7 +16,9 @@ namespace Vortice.Mathematics;
 public struct BoundingBox
     : IEquatable<BoundingBox>
     , IFormattable
+#if NET6_0_OR_GREATER
     , ISpanFormattable
+#endif
 #if NET8_0_OR_GREATER
     , IUtf8SpanFormattable
 #endif
@@ -546,6 +548,7 @@ public struct BoundingBox
         return $"BoundingBox {{ {nameof(Min)} = {Min.ToString(format, formatProvider)}, {nameof(Max)} = {Max.ToString(format, formatProvider)} }}";
     }
 
+#if NET6_0_OR_GREATER
     /// <inheritdoc />
     public readonly bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
     {
@@ -599,6 +602,7 @@ public struct BoundingBox
         charsWritten = numWritten + partLength;
         return true;
     }
+#endif
 
 #if NET8_0_OR_GREATER
     /// <inheritdoc />

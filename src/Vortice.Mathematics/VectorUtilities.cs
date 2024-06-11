@@ -9,8 +9,11 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
+#if NETCOREAPP3_0_OR_GREATER
 using System.Runtime.Intrinsics.Arm;
 using System.Runtime.Intrinsics.X86;
+#endif
+
 using static Vortice.Mathematics.MathHelper;
 
 namespace Vortice.Mathematics;
@@ -228,6 +231,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> CompareEqual(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (AdvSimd.Arm64.IsSupported)
         {
             return AdvSimd.CompareEqual(left, right);
@@ -237,6 +241,7 @@ public static unsafe class VectorUtilities
             return Sse.CompareEqual(left, right);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -260,6 +265,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> CompareEqual(Vector128<float> left, Vector128<float> right, Vector128<float> epsilon)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse.IsSupported)
         {
             Vector128<float> result = Sse.Subtract(left, right);
@@ -273,6 +279,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.CompareLessThanOrEqual(result, epsilon);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right, epsilon);
         }
@@ -295,6 +302,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CompareNotEqualAny(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             Vector128<float> result = Sse.CompareNotEqual(left, right);
@@ -306,6 +314,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.Arm64.MaxAcross(result).ToScalar() == 0;
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -326,6 +335,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> Add(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse.Add(left, right);
@@ -335,6 +345,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.Add(left, right);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -357,6 +368,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> Subtract(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse.Subtract(left, right);
@@ -366,6 +378,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.Subtract(left, right);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -389,6 +402,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> MultiplyAdd(Vector128<float> addend, Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             Vector128<float> result = Sse.Multiply(left, right);
@@ -400,6 +414,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.Add(addend, result);
         }
         else
+#endif
         {
             return SoftwareFallback(addend, left, right);
         }
@@ -421,6 +436,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool CompareTrueAll(Vector128<float> value)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse.MoveMask(value) == 0x0F;
@@ -430,6 +446,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.Arm64.MinAcross(value).ToScalar() != 0;
         }
         else
+#endif
         {
             return SoftwareFallback(value.AsUInt32());
         }
@@ -450,6 +467,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> CompareLessThan(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse.CompareLessThan(left, right);
@@ -459,6 +477,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.CompareLessThan(left, right);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -481,6 +500,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> CompareLessThanOrEqual(Vector128<float> left, Vector128<float> right)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse.CompareLessThanOrEqual(left, right);
@@ -490,6 +510,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.CompareLessThanOrEqual(left, right);
         }
         else
+#endif
         {
             return SoftwareFallback(left, right);
         }
@@ -518,6 +539,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> Round(Vector128<float> vector)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse41.IsSupported)
         {
             return Sse41.RoundToNearestInteger(vector);
@@ -540,6 +562,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.RoundToNearest(vector);
         }
         else
+#endif
         {
             return SoftwareFallback(vector);
         }
@@ -558,6 +581,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> Truncate(Vector128<float> vector)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Sse.IsSupported)
         {
             return Sse41.RoundToZero(vector);
@@ -567,6 +591,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.RoundToZero(vector);
         }
         else
+#endif
         {
             return SoftwareFallback(vector);
         }
@@ -605,6 +630,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> VectorSplatX(Vector128<float> value)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Avx.IsSupported)
         {
             return Avx.Permute(value, 0b00_00_00_00);
@@ -618,6 +644,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.DuplicateSelectedScalarToVector128(value, 0);
         }
         else
+#endif
         {
             float x = value.GetX();
             return Vector128.Create(x);
@@ -632,6 +659,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> VectorSplatY(Vector128<float> value)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Avx.IsSupported)
         {
             return Avx.Permute(value, 0b01_01_01_01);
@@ -645,6 +673,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.DuplicateSelectedScalarToVector128(value, 1);
         }
         else
+#endif
         {
             float y = value.GetY();
             return Vector128.Create(y);
@@ -659,6 +688,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> VectorSplatZ(Vector128<float> value)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Avx.IsSupported)
         {
             return Avx.Permute(value, 0b10_10_10_10);
@@ -672,6 +702,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.DuplicateSelectedScalarToVector128(value, 2);
         }
         else
+#endif
         {
             float z = value.GetZ();
             return Vector128.Create(z);
@@ -686,6 +717,7 @@ public static unsafe class VectorUtilities
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector128<float> VectorSplatW(Vector128<float> value)
     {
+#if NETCOREAPP3_0_OR_GREATER
         if (Avx.IsSupported)
         {
             return Avx.Permute(value, 0b11_11_11_11);
@@ -699,6 +731,7 @@ public static unsafe class VectorUtilities
             return AdvSimd.DuplicateSelectedScalarToVector128(value, 3);
         }
         else
+#endif
         {
             float w = value.GetW();
             return Vector128.Create(w);
