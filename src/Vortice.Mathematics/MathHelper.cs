@@ -3,12 +3,23 @@
 // Copyright © Tanner Gooding and Contributors. Licensed under the MIT License (MIT). See License.md in the repository root for more information.
 // Based on: https://github.com/terrafx/terrafx/blob/main/sources/Core/Utilities/MathUtilities.cs
 
+#if !NETCOREAPP3_0_OR_GREATER
+extern alias bitops_polyfill;
+#endif
+
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+#if !NETCOREAPP3_0_OR_GREATER
+using System.Runtime.InteropServices;
+#endif
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.Arm;
 using System.Runtime.Intrinsics.X86;
+
+#if !NETCOREAPP3_0_OR_GREATER
+using BitOperations = bitops_polyfill::System.Numerics.BitOperations;
+#endif
 
 namespace Vortice.Mathematics;
 
@@ -25,7 +36,18 @@ public static class MathHelper
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
+#if NET6_0_OR_GREATER
             return BitConverter.UInt32BitsToSingle(0xFFFFFFFF);
+#else
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            static unsafe TTo ReinterpretCast<TFrom, TTo>(TFrom o)
+                where TFrom : unmanaged
+                where TTo : unmanaged
+                    => sizeof(TFrom) == sizeof(TTo)
+                        ? MemoryMarshal.GetReference(MemoryMarshal.Cast<TFrom, TTo>(stackalloc TFrom[1] { o }))
+                        : throw new NotSupportedException("structs must be same size");
+            return ReinterpretCast<uint, float>(0xFFFFFFFF);
+#endif
         }
     }
 
