@@ -15,6 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.Numerics" />
+    <PackageReference Include="Shim.System.Numerics" Aliases="bitops_polyfill" />
+    <PackageReference Include="Ultz.Bcl.Half" />
     <ProjectReference Include="$(MSBuildProjectDirectory)/../VectorStructPolyfill/VectorStructPolyfill.csproj" />
     <None Include="$(RepoRootPath)README.md" Pack="true" PackagePath="\" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
