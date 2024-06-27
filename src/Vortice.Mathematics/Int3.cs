@@ -133,7 +133,7 @@ public struct Int3 : IEquatable<Int3>, IFormattable
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         readonly get
         {
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+            if (index >= Count) throw new ArgumentOutOfRangeException(paramName: nameof(index));
 
             ref int address = ref Unsafe.AsRef(in X);
             return Unsafe.Add(ref address, index);

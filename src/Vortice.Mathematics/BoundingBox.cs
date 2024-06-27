@@ -175,7 +175,7 @@ public struct BoundingBox
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public readonly void GetCorners(Vector3[] corners)
     {
-        ArgumentNullException.ThrowIfNull(corners);
+        if (corners is null) throw new ArgumentNullException(paramName: nameof(corners));
 
         if (corners.Length < CornerCount)
         {
