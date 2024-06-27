@@ -1,6 +1,7 @@
 // Copyright (c) Amer Koleci and contributors.
 // Licensed under the MIT License (MIT). See LICENSE in the repository root for more information.
 
+#if NET6_0_OR_GREATER
 using System.Numerics;
 
 namespace Vortice.Mathematics;
@@ -135,6 +136,7 @@ public static class FormatExtensions
         return true;
     }
 
+#if NET8_0_OR_GREATER
     public static bool TryFormat(this Vector2 vector, Span<byte> utf8Destination, out int bytesWritten, ReadOnlySpan<char> format = default, IFormatProvider? provider = null)
     {
         int numWritten = 0;
@@ -259,4 +261,6 @@ public static class FormatExtensions
         bytesWritten = numWritten + partLength;
         return true;
     }
+#endif
 }
+#endif
